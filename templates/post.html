@@ -1,0 +1,33 @@
+$def with(title, content, created, authorname, login, id, comments)
+$var title = title
+
+<div id="Leftbar"></div>
+<div id="Rightbar">
+    $if login:
+        <p>$login, 你好</p>
+    $else:
+        <p>请登录</p>
+</div>
+<div id="content">
+
+    <h2>$title</h2>
+    <p>$authorname &nbsp 创建时间：$created &nbsp
+    $if login == authorname:
+        <a href="/del/$id">删除</a>这个帖子
+    </p>
+    <hr/>
+    <div class="post_content">$content</div>
+    <div class="comment">
+        $for comment in comments:
+            <p>$comment.content &nbsp $comment.username</p><hr>
+    </div>
+    <div class="reply">
+        <div class="reply_header">添加一条新回复</div>
+        <div class="reply_body">
+            <form method="post" id="reply_form">
+                <textarea form="reply_form" name="content" id="reply_content"></textarea><br>
+                <input type="submit" value="回复">
+            </form>
+        </div>
+    </div>
+</div>

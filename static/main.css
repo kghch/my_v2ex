@@ -1,0 +1,18 @@
+#header {height: 44px; border-bottom: 1px solid black; text-align: center;}
+#wrapper {margin: 20px;}
+#Leftbar {width: 0px; float:left; }
+#Rightbar {border: 1px solid green; float: right; width: 270px;}
+#content {border: 1px solid red; width:auto; margin: 0px 310px 0px 20px;}
+#footer {height: 64px; border-top: 1px solid black; text-align: center;}
+
+#signin_error {border-bottom: 1px solid black; }
+#signup_box_header, #signin_box_header, #create_header {height: 35px; border-bottom: 1px solid black;}
+#signup_box_body, #signin_box_body, .create_body {margin: 20px;}
+
+textarea {resize: none; }
+#create_body_title {width: 700px; }
+#create_body_content {height: 500px; width: 700px;}
+
+.reply, .comment {margin: 20px;}
+.post_content {height: 400px; margin: 20px; border: 1px solid green;}
+#reply_content {height: 150px; width: 600px; }

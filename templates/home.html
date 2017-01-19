@@ -1,0 +1,17 @@
+$def with(posts, user)
+$var title = 'home-v2ex'
+
+<div id="Leftbar"></div>
+<div id="Rightbar">
+    $if user:
+        <div id="profile">
+            <p>$user</p>
+            <p><a href="/create">创作新主题</a></p>
+        </div>
+    $else:
+        <p>请登录</p>
+</div>
+<div id="content">
+    $for title, id in posts:
+        <p><a href="/t/$id">$title</a></p>
+</div>
