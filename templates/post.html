@@ -10,23 +10,50 @@ $var title = title
 </div>
 <div id="content">
 
-    <h2>$title</h2>
-    <p>$authorname &nbsp 创建时间：$created &nbsp
-    $if login == authorname:
-        <a href="/del/$id">删除</a>这个帖子
-    </p>
-    <hr/>
-    <div class="post_content">$content</div>
-    <div class="comment">
-        $for comment in comments:
-            <p>$comment.content &nbsp $comment.username</p><hr>
+    <div id="post">
+        <div id="post_header">
+            <table width="100%"><tbody>
+                <tr>
+                    <td>
+                        <h1>$title</h1>
+                        <p><a href="/u/$authorname">$authorname</a> &nbsp; $created &nbsp;
+                        $if login == authorname:
+                            <a href="/del/$id">删除</a>这个帖子
+                        </p>
+                    </td>
+                    <td align="right"><img src="img/user/2.png" alt="image"></td>
+                </tr>
+            </tbody></table>
+
+        </div>
+        <hr/>
+        <div id="post_content">$content</div>
     </div>
-    <div class="reply">
-        <div class="reply_header">添加一条新回复</div>
-        <div class="reply_body">
+    <div class="sep20"></div>
+    <div id="comment">
+        $for floor, comment in enumerate(comments, 1):
+            <div class="comment_table">
+                <table width="100%"><tbody>
+                    <tr>
+                        <td width="50"><img src="/img/users/1.png" alt="头像"></td>
+                        <td width="10"></td>
+                        <td>
+                            <strong><a href="/u/$comment.username">$comment.username</a></strong> &nbsp; <span class="fade">$comment.time</span>
+                            <div class="sep6"></div>
+                            <span class=""> $comment.content</span>
+                        </td>
+                        <td width="30" align="right"><div class="fade comment_floor">$floor</div></td>
+                    </tr>
+                </tbody></table>
+            </div>
+    </div>
+    <div class="sep20"></div>
+    <div id="reply">
+        <div id="reply_header">添加一条新回复</div><hr>
+        <div id="reply_body">
             <form method="post" id="reply_form">
                 <textarea form="reply_form" name="content" id="reply_content"></textarea><br>
-                <input type="submit" value="回复">
+                <input type="submit" value="回复" class="ui tiny grey basic button">
             </form>
         </div>
     </div>

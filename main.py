@@ -31,13 +31,13 @@ class Users(BaseModel):
     username = peewee.CharField()
     passwd = peewee.TextField()
     email = peewee.TextField()
-    join_time = peewee.DateField()
+    join_time = peewee.DateTimeField()
 
 
 class Comments(BaseModel):
     id = peewee.IntegerField()
     content = peewee.TextField()
-    time = peewee.TimeField()
+    time = peewee.DateTimeField()
     user_id = peewee.IntegerField()
     username = peewee.CharField()
     post_id = peewee.IntegerField()
@@ -81,13 +81,19 @@ class App(web.application):
 class HomeHandler(web.application):
     def GET(self):
         records = Posts.select().order_by(Posts.id.desc()).limit(30)
-        titles = []
-        ids = []
-        for record in records:
-            titles.append(record.title)
-            ids.append(record.id)
+        posts = []
 
-        posts = zip(titles, ids)
+        for record in records:
+            author = Users.get(Users.id == record.user_id).username
+            comments = Comments.select().where(Comments.post_id == record.id)
+            comment_num = comments.count()
+            last_comment = comments.order_by(Comments.time.desc()).first()
+            if not last_comment:
+                last_comment_user = ''
+            else:
+                last_comment_user = Users.get(Users.id == last_comment.user_id).username
+            posts.append([record.title, record.id, author, record.created, last_comment_user, comment_num])
+        # title, id, author
         uid, user = current_user()
         if user:
             return render_login(user).home(posts, user)
@@ -117,7 +123,6 @@ class SigninHandler(web.application):
 
     def POST(self):
         i = web.input()
-        print i.username
 
         user_exist = Users.select().where(Users.username == i.username, Users.passwd == i.password)
         if user_exist:
@@ -142,7 +147,7 @@ class UserHandler(web.application):
         if login:
             return render_login(user).user(user)
         else:
-            raise web.notfound()
+            return render.user(user)
 
 
 class CreateHandler(web.application):
@@ -192,8 +197,9 @@ class PostHandler(web.application):
             return render.unauthorized('只有登录用户才可以回复，请先<a href="/signin">登录</a>')
         i = web.input()
         reply_content = i.content
+        created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if i.content:
-            Comments.create(content=reply_content, user_id=uid, username=reply_user, post_id=pid)
+            Comments.create(content=reply_content, time=created, user_id=uid, username=reply_user, post_id=pid)
         raise web.seeother('/t/%s' % pid)
 
 

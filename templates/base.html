@@ -14,7 +14,19 @@ $def with(content)
 </head>
 <body>
     <div id="header">
-        <a href="/">V2EX</a> , search box, main page, <a href="/signup">注册</a>, <a href="/signin">登录</a>
+        <div class="seg6"></div>
+        <div id="header_table">
+            <table width="100%">
+                <tbody><tr>
+                <td align="left" width="110"><a href="/"><img src="/static/img/logo.png" width="94" height="30" id="home_logo"></a>
+                <td class="ui mini icon input" id="search" align="left">
+                  <i class="inverted circular search link icon"></i>
+                  <input type="text" placeholder="Search...">
+                </td>
+                <td align="right" id="header_right"><a class="header_link" href="/signup">注册</a>&nbsp; <a class="header_link" href="/signin">登录</a></td>
+                </tr></tbody>
+            </table>
+        </div>
     </div>
 
     <div id="wrapper">
