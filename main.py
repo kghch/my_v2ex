@@ -32,6 +32,7 @@ class Users(BaseModel):
     passwd = peewee.TextField()
     email = peewee.TextField()
     join_time = peewee.DateTimeField()
+    last_login = peewee.DateTimeField()
 
 
 class Comments(BaseModel):
@@ -51,7 +52,8 @@ urls = (
     '/create', 'CreateHandler',
     '/t/(\d+)', 'PostHandler',
     '/edit/(\d+)', 'EditHandler',
-    '/del/(\d+)', 'DeleteHandler'
+    '/del/(\d+)', 'DeleteHandler',
+    '/daily/(\w+)', 'DailyHandler'
 )
 
 
@@ -95,10 +97,18 @@ class HomeHandler(web.application):
             posts.append([record.title, record.id, author, record.created, last_comment_user, comment_num])
         # title, id, author
         uid, user = current_user()
+        daily_mission = False
         if user:
-            return render_login(user).home(posts, user)
+            last = Users.get(Users.username == user).last_login
+            today = datetime.datetime.now()
+            if today.year == last.year and today.month == last.month and today.day == last.day:
+                daily_mission = False
+            else:
+                daily_mission = True
+
+            return render_login(user).home(posts, user, daily_mission)
         else:
-            return render.home(posts, '')
+            return render.home(posts, '', daily_mission)
 
 
 class SignupHandler(web.application):
@@ -144,10 +154,25 @@ class SignoutHandler(web.application):
 class UserHandler(web.application):
     def GET(self, user):
         uid, login = current_user()
+        u_record = Users.get(Users.username == user)
+        user_id = u_record.id
+        join_time = u_record.join_time
+        records = Posts.select().where(Posts.user_id == user_id).order_by(Posts.created.desc())
+        posts = []
+        for record in records:
+            author = Users.get(Users.id == record.user_id).username
+            comments = Comments.select().where(Comments.post_id == record.id)
+            comment_num = comments.count()
+            last_comment = comments.order_by(Comments.time.desc()).first()
+            if not last_comment:
+                last_comment_user = ''
+            else:
+                last_comment_user = Users.get(Users.id == last_comment.user_id).username
+            posts.append([record.title, record.id, author, record.created, last_comment_user, comment_num])
         if login:
-            return render_login(user).user(user)
+            return render_login(user).user(user, posts, join_time)
         else:
-            return render.user(user)
+            return render.user(user, posts, join_time)
 
 
 class CreateHandler(web.application):
@@ -218,6 +243,29 @@ class DeleteHandler(web.application):
                 render_login(user).unauthorized('这是别人的帖子，你不能删除。')
             Posts.delete().where(Posts.id == id).execute()
             raise web.seeother('/')
+
+
+class DailyHandler(web.application):
+    def GET(self, user):
+        uid, c_user = current_user()
+        if c_user == user:
+            user_record = Users.get(Users.username == user)
+            last = user_record.last_login
+            today = datetime.datetime.now()
+            daily_mission = True
+            if today.year == last.year and today.month == last.month and today.day == last.day:
+                daily_mission = False
+            if daily_mission:
+                new_last_login = today.strftime('%Y-%m-%d %H:%M:%S')
+                user_record.last_login = new_last_login
+                user_record.save()
+                raise web.seeother('/')
+            else:
+                raise web.notfound()
+        else:
+            raise web.notfound()
+
+
 
 if __name__ == '__main__':
     app = App(urls, globals())

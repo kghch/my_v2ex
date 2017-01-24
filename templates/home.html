@@ -1,23 +1,27 @@
-$def with(posts, user)
-$var title = 'home-v2ex'
+$def with(posts, user, daily_mission)
+$var title = 'V2EX'
 
 <div id="Leftbar"></div>
 <div id="Rightbar">
     $if user:
-        <div id="profile" class="">
+        <div id="profile" class="white pad8">
             <p>$user</p>
             <p><a href="/create">创作新主题</a></p>
         </div>
+        $if daily_mission:
+            <div class="sep20"></div>
+            <div id="daily_mission" class="white pad8">
+                <a href="/daily/$user">领取每日签到奖励</a>
+            </div>
     $else:
         <p>请登录</p>
 </div>
 <div id="content">
     $for post in posts:
-
         <div class="post_table">
             <table width="100%"><tbody>
                 <tr>
-                    <td width="50"><img src="/img/users/1.png" alt="头像"></td>
+                    <td width="48"><img src="/static/img/users/$(post[2]).png" alt="头像" width="48"></td>
                     <td width="10"></td>
                     <td>
                         <span><a class="content_title" href="/t/$post[1]">$post[0]</a></span>

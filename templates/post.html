@@ -2,7 +2,7 @@ $def with(title, content, created, authorname, login, id, comments)
 $var title = title
 
 <div id="Leftbar"></div>
-<div id="Rightbar">
+<div id="Rightbar" class="white pad8">
     $if login:
         <p>$login, 你好</p>
     $else:
@@ -21,7 +21,7 @@ $var title = title
                             <a href="/del/$id">删除</a>这个帖子
                         </p>
                     </td>
-                    <td align="right"><img src="img/user/2.png" alt="image"></td>
+                    <td align="right"><img src="/static/img/users/$(authorname).png" alt="image" width="90"></td>
                 </tr>
             </tbody></table>
 
@@ -35,7 +35,7 @@ $var title = title
             <div class="comment_table">
                 <table width="100%"><tbody>
                     <tr>
-                        <td width="50"><img src="/img/users/1.png" alt="头像"></td>
+                        <td width="48"><img src="/static/img/users/$(comment.username).png" alt="头像" width="48"></td>
                         <td width="10"></td>
                         <td>
                             <strong><a href="/u/$comment.username">$comment.username</a></strong> &nbsp; <span class="fade">$comment.time</span>

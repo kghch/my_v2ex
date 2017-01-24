@@ -1,4 +1,54 @@
-$def with(user)
-$var title = 'Profile'
+$def with(user, posts, join_time)
+$var title = user
 
-Hello, $user
+<div id="Leftbar"></div>
+<div id="Rightbar">
+    $if user:
+        <div id="profile" class="white pad8">
+            <p>$user</p>
+            <p><a href="/create">创作新主题</a></p>
+        </div>
+    $else:
+        <p>请登录</p>
+</div>
+<div id="content">
+
+    <div id="user_profile">
+        <table id="user_profile_table"><tbody>
+            <tr>
+                <td width="100"><img src="/static/img/users/$(user).png" alt="头像"></td>
+                <td width="10"></td>
+                <td>
+                    <h1>$user</h1>
+                    <p>加入于$join_time</p>
+                </td>
+
+            </tr>
+        </tbody></table>
+    </div>
+
+    <div class="sep20"></div>
+
+    <div id="user_posts">
+        $for post in posts:
+        <div class="post_table">
+            <table width="100%"><tbody>
+                <tr>
+                    <td width="10"></td>
+                    <td>
+                        <span><a class="content_title" href="/t/$post[1]">$post[0]</a></span>
+                        <div class="sep6"></div>
+                        <span class="small fade"> •<strong><a href="/u/$post[2]" class="small_color">&nbsp;$post[2]</a></strong> &nbsp;•&nbsp;$post[3]&nbsp;
+                        $if post[4]:
+                            •&nbsp;最后回复来自于&nbsp;<strong><a href="/u/$post[4]" class="small_color">$post[4]</a></strong>
+                        </span>
+                    </td>
+                    <td align="right" width="40">
+                        $if post[5] != 0:
+                            <div class="comment_num">$post[5]</div>
+                    </td>
+                </tr>
+            </tbody></table>
+        </div>
+    </div>
+</div>
