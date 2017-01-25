@@ -1,0 +1,23 @@
+$def with(user)
+<div id="Leftbar"></div>
+<div id="Rightbar" class="white pad8">
+    <p>right</p>
+</div>
+<div id="content" class="white">
+    <div class="pad8 bottom">头像上传</div>
+    <form method="POST" enctype="multipart/form-data" class="pad8 bottom">
+        <table width="100%"><tbody>
+            <tr><td width="80">当前头像</td><td width="80"> <img src="/static/img/users/$(user).png" width="100"></td></tr>
+            <tr><td><div class="sep20"></div> </td></tr>
+            <tr><td>选择一个文件</td><td><input type="file" name="avatar"></td></tr>
+            <tr><td><div class="sep20"></div> </td></tr>
+            <tr><td></td><td><input type="submit" value="上传新头像" class="compact ui button"></td></tr>
+        </tbody></table>
+
+    </form>
+    <div class="pad8">
+        <p>关于头像的规则</p>
+        <li>V2EX 禁止使用任何低俗或者敏感图片作为头像</li>
+        <li>如果你是男的，请不要用女人的照片作为头像，这样可能会对其他会员产生误导</li>
+    </div>
+</div>

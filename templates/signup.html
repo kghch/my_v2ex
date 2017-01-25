@@ -1,20 +1,30 @@
 $var title = 'V2EX > 注册'
 
 <div id="Leftbar"></div>
-<div id="Rightbar">
-    'right bar'
+<div id="Rightbar" class="white">
+    <div class="bottom pad8">
+        <b>V2EX = way to explore</b>
+        <p>V2EX 是一个关于分享和探索的地方</p>
+    </div>
+    <div class="center pad8">
+        <a class="ui black basic button" href="/signup">现在注册</a>
+        <p class="pad8">已注册用户请&nbsp;<a href="/signin">登录</a></p>
+
+    </div>
 </div>
 <div id="content">
-    <div id="signup_box_header"> 注册</div>
+    <div class="white">
+    <div class="cell"> 注册 </div>
 
     <div id="signup_box_body">
-        <form method="POST">
+        <form method="POST" class="pad8">
             <table>
-                <tr><td>用户名</td><td><input name="username"></td></tr>
-                <tr><td>密码</td><td><input name="password" type="password"></td></tr>
-                <tr><td>注册邮箱</td><td><input name="email"></td></tr>
-                <tr><td><input type="submit" value="注册"></td></tr>
+                <tr><td>用户名</td><td><input name="username" class="marg5"></td></tr>
+                <tr><td>密码</td><td><input name="password" type="password" class="marg5"></td></tr>
+                <tr><td>注册邮箱</td><td><input name="email" class="marg5"></td></tr>
+                <tr><td><input type="submit" value="注册" class="compact ui button"></td></tr>
             </table>
         </form>
+    </div>
     </div>
 </div>

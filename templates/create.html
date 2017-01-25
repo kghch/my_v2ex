@@ -1,21 +1,21 @@
 <div id="Leftbar"></div>
-<div id="Rightbar">
+<div id="Rightbar" class="white pad8">
     <h3>发帖提示：</h3>
     <li>a</li>
     <li>a</li>
     <li>a</li>
 
 </div>
-<div id="content">
+<div id="content" class="white">
     <div id="create_box">
-        <div id="create_header">创作新主题</div>
+        <div class="cell">创作新主题</div>
         <form method="post" id="create_form">
-            <p>主题标题</p>
-            <textarea form="create_form" name="title" id="create_body_title" class="create_body" rows="1" autofocus="autofocus"></textarea>
-            <p>正文</p>
-            <textarea form="create_form" name="content" id="create_body_content" class="create_body" rows="10" ></textarea>
-            <div id="create_leaf"> select 框</div>
-            <div id="create_footer"><input type="submit" value="发布主题"> </div>
+            <div class="cell">主题标题</div>
+            <textarea form="create_form" name="title" class="cell" rows="1" autofocus="autofocus" placeholder="请输入主题标题，如果标题能够表达完整内容，则正文可以为空" ></textarea>
+            <div class="cell">正文</div>
+            <textarea form="create_form" name="content" id="create_body_content" class="cell" rows="20" ></textarea>
+            <div class="cell"> select 框</div>
+            <div class="cell"><input type="submit" value="发布主题"> </div>
         </form>
 
     </div>

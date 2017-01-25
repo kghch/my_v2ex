@@ -2,6 +2,7 @@
 
 import os
 import sys
+import random
 import datetime
 import peewee
 import web
@@ -33,6 +34,7 @@ class Users(BaseModel):
     email = peewee.TextField()
     join_time = peewee.DateTimeField()
     last_login = peewee.DateTimeField()
+    coins = peewee.IntegerField()
 
 
 class Comments(BaseModel):
@@ -53,7 +55,8 @@ urls = (
     '/t/(\d+)', 'PostHandler',
     '/edit/(\d+)', 'EditHandler',
     '/del/(\d+)', 'DeleteHandler',
-    '/daily/(\w+)', 'DailyHandler'
+    '/daily/(\w+)', 'DailyHandler',
+    '/settings', 'SettingsHandler'
 )
 
 
@@ -99,16 +102,18 @@ class HomeHandler(web.application):
         uid, user = current_user()
         daily_mission = False
         if user:
-            last = Users.get(Users.username == user).last_login
+            u = Users.get(Users.username == user)
+            last = u.last_login
+            coins = u.coins
             today = datetime.datetime.now()
             if today.year == last.year and today.month == last.month and today.day == last.day:
                 daily_mission = False
             else:
                 daily_mission = True
 
-            return render_login(user).home(posts, user, daily_mission)
+            return render_login(user).home(posts, user, daily_mission, coins)
         else:
-            return render.home(posts, '', daily_mission)
+            return render.home(posts, '', daily_mission, '')
 
 
 class SignupHandler(web.application):
@@ -257,6 +262,7 @@ class DailyHandler(web.application):
                 daily_mission = False
             if daily_mission:
                 new_last_login = today.strftime('%Y-%m-%d %H:%M:%S')
+                user_record.coins += random.randint(1, 20)
                 user_record.last_login = new_last_login
                 user_record.save()
                 raise web.seeother('/')
@@ -265,6 +271,21 @@ class DailyHandler(web.application):
         else:
             raise web.notfound()
 
+
+class SettingsHandler(web.application):
+    def GET(self):
+        uid, user = current_user()
+        if uid:
+            return render_login(user).settings(user)
+        else:
+            raise web.seeother('/signin')
+
+    def POST(self):
+        i = web.input(avatar={})
+        uid, user = current_user()
+        with open('static/img/users/%s.png' % user, 'wb') as f:
+            f.write(i.avatar.file.read())
+        raise web.seeother('/u/%s' % user)
 
 
 if __name__ == '__main__':

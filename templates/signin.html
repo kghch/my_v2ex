@@ -2,22 +2,22 @@ $def with(info)
 $var title = 'V2EX > 登录'
 
 <div id="Leftbar"></div>
-<div id="Rightbar">
-    <p>登录</p>
-    <p>right bar</p>
+<div id="Rightbar" class="white pad8">
+    <p>其它登录方式</p>
 </div>
 <div id="content">
-    <div class="sign_content">
-        <div id="signin_box_header"> 登录</div>
+    <div class="white">
+        <div class="cell"> 登录 <i class="lock icon"></i> </div>
 
         <div id="signin_box_body">
             $if info:
                 <div id="signin_error">$info</div>
-            <form id="signin_form" method="POST">
+            <form id="signin_form" method="POST" class="pad8">
                 <table>
-                    <tr><td>用户名</td><td><input name="username"></td></tr>
-                    <tr><td>密码</td><td><input name="password" type="password"></td></tr>
-                    <tr><td><input type="submit" value="登录" id="signin_submit"></td></tr>
+                    <tr><td>用户名</td><td><input name="username" class="marg5"></td></tr>
+                    <tr><td>密码</td><td><input name="password" type="password" class="marg5"></td></tr>
+                    <tr><td><input type="submit" value="登录" id="signin_submit" class="compact ui button"></td></tr>
+                    <tr><td><div class="marg5"><a href=""><small>我忘记密码了</small></a></div></td></tr>
                 </table>
             </form>
         </div>

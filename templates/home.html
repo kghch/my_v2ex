@@ -1,4 +1,4 @@
-$def with(posts, user, daily_mission)
+$def with(posts, user, daily_mission, coins)
 $var title = 'V2EX'
 
 <div id="Leftbar"></div>
@@ -11,10 +11,15 @@ $var title = 'V2EX'
         $if daily_mission:
             <div class="sep20"></div>
             <div id="daily_mission" class="white pad8">
-                <a href="/daily/$user">领取每日签到奖励</a>
+                <a href="/daily/$user">领取今日登录奖励</a>
             </div>
+
+        <div class="sep20"></div>
+        <div class="white pad8">
+            账户余额:$coins铜币
+        </div>
     $else:
-        <p>请登录</p>
+        <p class="white pad8">请登录</p>
 </div>
 <div id="content">
     $for post in posts:

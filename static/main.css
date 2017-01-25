@@ -2,6 +2,9 @@
 .sep20 {padding-top: 20px;}
 .white {background-color: white;}
 .pad8 {padding: 8px;}
+.marg5 {margin: 5px;}
+.bottom {border-bottom: 1px solid #DDDDDD;}
+.center {text-align: center;}
 
 hr {color: #DDDDDD;}
 body {font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;}
@@ -39,14 +42,14 @@ a.content_title:hover {color: #545454; }
 .small_color {color: rgba(0,0,0,.6);}
 .comment_num {padding: 2px 5px 2px 5px; text-align: center; background-color: #aab0c6; border-radius: 10px; color: white;}
 
-#signin_error {border-bottom: 1px solid black; }
-.sign_content {background-color: white;}
-#signup_box_header, #signin_box_header, #create_header {height: 35px; border-bottom: 1px solid #DDDDDD; }
-#signup_box_body, #signin_box_body, .create_body {margin: 20px;}
+#signin_error {background-color: #ffffc0; padding: 8px; border-bottom: 1px solid #DDDDDD; }
 
-textarea {resize: none; }
-#create_body_title {min-width: 500px; }
-#create_body_content {height: 500px; min-width: 500px;}
+
+.cell {border-bottom: 1px solid #DDDDDD; padding: 10px;}
+
+textarea {resize: none; width: 96%;}
+#create_box {width: 100%;}
+
 
 
 #post {border: 1px solid #DDDDDD; background-color: white;}
