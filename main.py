@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import sys
 import random
 import datetime
 import peewee
 import web
+import markdown
 
 reload(sys)
 sys.setdefaultencoding('utf8')
@@ -23,6 +25,7 @@ class Posts(BaseModel):
     id = peewee.IntegerField()
     title = peewee.TextField()
     content = peewee.TextField()
+    content_md = peewee.TextField()
     created = peewee.DateTimeField()
     user_id = peewee.IntegerField()
 
@@ -59,6 +62,7 @@ urls = (
     '/settings', 'SettingsHandler'
 )
 
+MARKDOWN_EXT = ('codehilite', 'extra')
 
 render = web.template.render(os.path.join(os.path.dirname(__file__), 'templates'), base='base')
 render_plain = web.template.render(os.path.join(os.path.dirname(__file__), 'templates'))
@@ -126,7 +130,8 @@ class SignupHandler(web.application):
         if i.username and i.password and i.email:
             join_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             try:
-                Users.create(username=i.username, passwd=i.password, email=i.email, join_time=join_time)
+                start_time = datetime.datetime(2017, 1, 1, 0, 0, 0, 0).strftime('%Y-%m-%d %H:%M:%S')
+                Users.create(username=i.username, passwd=i.password, email=i.email, join_time=join_time, last_login=start_time, coins=0)
             except:
                 print 'err'
         raise web.seeother('/')
@@ -195,7 +200,13 @@ class CreateHandler(web.application):
         user_id = Users.get(Users.username == login).id
         i = web.input()
         created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        post = Posts.create(title=i.title, content=i.content, user_id=user_id, created=created)
+        # 安全检查，script注入之类。
+        content = re.sub('</(\w+)>', '', i.content)
+
+        md = markdown.Markdown()
+        html_text = md.reset().convert(content)
+
+        post = Posts.create(title=i.title, content=i.content, content_md=html_text,user_id=user_id, created=created)
 
         raise web.seeother('/t/%s' % post.id)
 
@@ -208,7 +219,7 @@ class PostHandler(web.application):
             raise web.notfound()
 
         title = post.title
-        content = post.content
+        content = post.content_md
         created = post.created
         authorname = Users.get(Users.id == post.user_id).username
 
@@ -227,6 +238,7 @@ class PostHandler(web.application):
             return render.unauthorized('只有登录用户才可以回复，请先<a href="/signin">登录</a>')
         i = web.input()
         reply_content = i.content
+
         created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if i.content:
             Comments.create(content=reply_content, time=created, user_id=uid, username=reply_user, post_id=pid)

@@ -5,6 +5,7 @@
 .marg5 {margin: 5px;}
 .bottom {border-bottom: 1px solid #DDDDDD;}
 .center {text-align: center;}
+.font {font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;}
 
 hr {color: #DDDDDD;}
 body {font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;}
@@ -47,7 +48,7 @@ a.content_title:hover {color: #545454; }
 
 .cell {border-bottom: 1px solid #DDDDDD; padding: 10px;}
 
-textarea {resize: none; width: 96%;}
+textarea {resize: none; width: 96%; word-wrap: break-word; wrap: hard;}
 #create_box {width: 100%;}
 
 
@@ -65,6 +66,6 @@ textarea {resize: none; width: 96%;}
 #reply_header {padding: 10px;}
 #reply_body {padding: 10px;}
 #reply_content {height: 150px; width: 600px; }
-
+.reply_content {word-break: break-all; word-wrap: break-word;}
 
 #user_profile {padding: 8px; background-color: white;}

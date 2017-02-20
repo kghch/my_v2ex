@@ -27,7 +27,7 @@ $var title = title
 
         </div>
         <hr/>
-        <div id="post_content">$content</div>
+        <div id="post_content"><pre class="font">$:content</pre></div>
     </div>
     <div class="sep20"></div>
     <div id="comment">
@@ -40,7 +40,7 @@ $var title = title
                         <td>
                             <strong><a href="/u/$comment.username">$comment.username</a></strong> &nbsp; <span class="fade">$comment.time</span>
                             <div class="sep6"></div>
-                            <span class=""> $comment.content</span>
+                            <div class="reply_content"><pre class="font">$comment.content</pre></div>
                         </td>
                         <td width="30" align="right"><div class="fade comment_floor">$floor</div></td>
                     </tr>
@@ -52,7 +52,7 @@ $var title = title
         <div id="reply_header">添加一条新回复</div><hr>
         <div id="reply_body">
             <form method="post" id="reply_form">
-                <textarea form="reply_form" name="content" id="reply_content"></textarea><br>
+                <textarea form="reply_form" name="content" id="reply_content" cols="2"></textarea><br>
                 <input type="submit" value="回复" class="compact ui button">
             </form>
         </div>
