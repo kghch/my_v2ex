@@ -27,6 +27,7 @@ class Posts(BaseModel):
     content = peewee.TextField()
     content_md = peewee.TextField()
     created = peewee.DateTimeField()
+    updated = peewee.DateTimeField()
     user_id = peewee.IntegerField()
 
 
@@ -89,9 +90,20 @@ class App(web.application):
 
 class HomeHandler(web.application):
     def GET(self):
-        records = Posts.select().order_by(Posts.id.desc()).limit(30)
-        posts = []
+        # 今日热议主题
+        hot_posts = []
+        today = datetime.datetime.now()
+        current_datetime = '%s-%s-%s 00:00:00' % (today.year, today.month, today.day)
+        hot_posts_records = Comments.select(Comments.post_id, peewee.fn.Count(Comments.post_id).alias('num')). \
+            where(Comments.time > current_datetime).group_by(Comments.post_id).having(
+            peewee.fn.Count(Comments.post_id) > 2). \
+            order_by(peewee.fn.Count(Comments.post_id).desc()).limit(10)
+        for r in hot_posts_records:
+            post = Posts.get(Posts.id == r.post_id)
+            hot_posts.append([post.title, r.post_id])
 
+        records = Posts.select().order_by(Posts.updated.desc()).limit(30)
+        posts = []
         for record in records:
             author = Users.get(Users.id == record.user_id).username
             comments = Comments.select().where(Comments.post_id == record.id)
@@ -101,10 +113,25 @@ class HomeHandler(web.application):
                 last_comment_user = ''
             else:
                 last_comment_user = Users.get(Users.id == last_comment.user_id).username
-            posts.append([record.title, record.id, author, record.created, last_comment_user, comment_num])
+
+            interval = today - record.updated
+            if interval >= datetime.timedelta(days=365):
+                updated = '%s' % record.updated
+            elif interval >= datetime.timedelta(days=2):
+                updated = '%s天前' % interval.days
+            else:
+                if interval >= datetime.timedelta(hours=1):
+                    updated = '%s小时前' % (interval.seconds/3600)
+                elif interval >= datetime.timedelta(minutes=1):
+                    updated = '%s分钟前' % (interval.seconds/60)
+                else:
+                    updated = '%s秒前' % interval.seconds
+            posts.append([record.title, record.id, author, updated, last_comment_user, comment_num])
+
         # title, id, author
         uid, user = current_user()
         daily_mission = False
+
         if user:
             u = Users.get(Users.username == user)
             last = u.last_login
@@ -115,9 +142,9 @@ class HomeHandler(web.application):
             else:
                 daily_mission = True
 
-            return render_login(user).home(posts, user, daily_mission, coins)
+            return render_login(user).home(posts, user, daily_mission, coins, hot_posts)
         else:
-            return render.home(posts, '', daily_mission, '')
+            return render.home(posts, '', daily_mission, '', hot_posts)
 
 
 class SignupHandler(web.application):
@@ -242,6 +269,9 @@ class PostHandler(web.application):
         created = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         if i.content:
             Comments.create(content=reply_content, time=created, user_id=uid, username=reply_user, post_id=pid)
+            post = Posts.get(Posts.id == pid)
+            post.updated = created
+            post.save()
         raise web.seeother('/t/%s' % pid)
 
 
@@ -291,7 +321,7 @@ class SettingsHandler(web.application):
             return render_login(user).settings(user)
         else:
             raise web.seeother('/signin')
-
+        
     def POST(self):
         i = web.input(avatar={})
         uid, user = current_user()

@@ -1,4 +1,4 @@
-$def with(posts, user, daily_mission, coins)
+$def with(posts, user, daily_mission, coins, hot_posts)
 $var title = 'V2EX'
 
 <div id="Leftbar"></div>
@@ -20,6 +20,13 @@ $var title = 'V2EX'
         </div>
     $else:
         <p class="white pad8">请登录</p>
+    <div class="sep20"></div>
+    <div class="white pad8">今日热议主题</div>
+    $for hot_post in hot_posts:
+        <div class="hot_table">
+            <a class="content_title" href="/t/$hot_post[1]">$hot_post[0]</a>
+        </div>
+
 </div>
 <div id="content">
     $for post in posts:
